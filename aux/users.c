@@ -4,8 +4,21 @@
 #include <openssl/sha.h>
 #include <termios.h>
 #include "expressions/exp.c"
+// ADD THE GARBAGE COLLECTOR #include <gc.h>
+// FOR COMPARING STRING NEED TO USE STRCMP'OR STRNCMP
 
 #define USER_FILE "saturn_access.txt"
+
+// REALLOC EXTREMELY USEFULLLLLLL
+
+char* get_password(char* msg);
+FILE* open_file_read(void);
+FILE* open_file_write(void);
+uint8_t add_user(User* user);
+uint8_t* return_hashed(char* input);
+char* get_user_string(char* name);
+char** parse_user_string(char* line, uint8_t size);
+
 
 typedef struct User{
     char name[256];
@@ -13,7 +26,12 @@ typedef struct User{
     uint8_t hash[64]; // sha-512, 64 bytes, 128 hex chars if as a string 
 } User;
 
-uint8_t* get_password(char* msg){
+typedef struct AccessFile{
+    char** lines;
+    uint8_t n_lines;
+}AccessFile;
+
+char* get_password(char* msg){
     // https://stackoverflow.com/questions/1786532/c-command-line-password-input
     // thanks s2
     char* password[BUFFER_SIZE];
@@ -35,7 +53,7 @@ uint8_t* get_password(char* msg){
 
     tcseattr(STDIN_FILENO, TCSANOW, &o_term);
 
-    return &password;
+    return password;
 }
 
 FILE* open_file_read(void){
@@ -80,10 +98,85 @@ uint8_t* return_hashed(char* input){
     return &hash;
 }
 
-void* check_credentials(char* user, uint8_t* hashed){
-    return NULL;
+uint8_t check_credentials(char* user, uint8_t* hashed){
+    return 1;
+    return 0;
 }
 
 char* get_user_salt(char* username){
     return NULL;
+}
+
+/*
+
+snprintf and vsnprintf
+
+*/
+
+
+char* get_user_string(char* name){
+    // https://stackoverflow.com/questions/3501338/c-read-file-line-by-line
+
+    FILE* fp = open_file_read();
+    FILE* fp2 = *fp;
+    char * line = NULL;
+    // type of the result returned by sizeof operator, unsigned integer
+    size_t len = 0;
+    // same as size_t but signed
+    ssize_t read;
+
+    uint8_t n_lines = 0;
+    while(read = getline(&line, &len, fp)) != -1)
+        n_lines++;
+
+    char** file_lines = malloc(n_lines * sizeof(char*));
+
+    // Returns the pointer to the beginning of the file;
+    fp = fp2;
+    n_lines = 0;
+    while ((read = getline(&line, &len, fp)) != -1) {
+        // %zu specifies the value from size_t type
+        // read => number of letters in line
+        // line => string containing the line
+        char* tmp = malloc(read * sizeof(char) + 1);
+        strcpy(tmp, line);
+        tmp[read + 1] = '\0';
+        file_lines[n_lines] = tmp;
+        n_lines++;
+    }
+    fclose(fp);
+
+    AccessFile* acc = malloc(sizeof(AccessFile));
+    acc->lines = lines;
+    acc->n_lines = n_lines;
+    return acc;
+
+    // AccessFile* 
+}
+
+char** parse_user_string(char* line, uint8_t size){
+    uint8_t v[4];
+    uint8_t v_ind = 0;
+    for (int i = 0; i < size; i++)
+        if (line[i] == ':')
+            v[v_ind++]=i;
+    char** data = malloc(4 * sizeof(char*));
+
+    uint8_t k = 0
+    while(k < 4){
+        if (k == 0){
+            char* word = malloc(v[0] * sizeof(char) + 1);
+            strncpy(word, &line[0], v[1]);
+            word[v[0]] = '\0';
+        }else{
+            char* word = malloc((v[k] - v[k-1]) * sizeof(char) + 1);
+            strncpy(word, &line[v[k-1]+1], v[k]);
+            word[v[k] - v[k-1]] = '\0';  
+        }
+        data[k] = word;
+        k++;
+    }
+    // 'data' should contain the info from the access file, <name : role : salt : hash> ending with '\0'
+    return data;
+    
 }

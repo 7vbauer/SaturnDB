@@ -71,10 +71,21 @@ typedef struct Buffer{
 } Buffer;
 
 typedef struct Parsed_buffer{
+    Buffer* bff; // Keeps the address of the buffer
     char** words;
     uint8_t counter;
 }Parsed_buffer;
+
+typedef struct Token_array{
+    Buffer* bff;
+    char** tokens;
+    char** words;
+    uint8_t counter;
+}Token_array;
+
 // ...
+
+
 Buffer* create_buffer(void){
     Buffer* buffer = malloc(sizeof(Buffer));
     for(int i = 0; i < BUFFER_SIZE; i++) buffer->stream[i] = '\0';
@@ -162,3 +173,21 @@ Token_array* tokenize_input(Parsed_buffer* b){
         
     */
 }
+
+void clean_buffer(Buffer* b){
+    for(int i = 0; i < BUFFER_SIZE; i++)
+        b->stream[i] == '\0';
+}
+
+Token_array* wait_input(Token_array* ta){
+    Buffer* b = ta->
+    get_input(b);
+    Parsed* 
+}
+
+/*
+
+Buffer -> Parsed_buffer -> Token_array -> (USE BUFFER) -> clean_buffer ->
+          Buffer           Buffer
+
+*/
