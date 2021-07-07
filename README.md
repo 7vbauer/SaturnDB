@@ -1,13 +1,12 @@
 # SaturnDB
 
-This project is an educational attempt to build a DBMS in C.
+This project is an educational attempt to build a (R)DBMS in C.
 
 It's purposes are to learn database concepts pratically, exercite my C language skills and build a portifolio.
 
 ***So far there is not executable yet.***
 
 Initial development will be done not paying much attention to efficiency or following databases principles religiously, as i'm looking foward to have a simple functional executable as soon as possible. 
-
 Those things will be taken care later.
 
 
