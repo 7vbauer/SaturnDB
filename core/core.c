@@ -130,12 +130,6 @@ void init_saturdb(SaturnDB* sdb){
     sdb->terminal_width = (uint8_t) 0;
 }
 
-    char user_logged[256];
-    char user_looged_role[256];
-    char db_selected[256];
-    uint16_t port;
-    uint8_t installed;
-    uint8_t terminal_width;
 
 
 
