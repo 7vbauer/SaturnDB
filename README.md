@@ -2,7 +2,7 @@
 
 This project is an educational attempt to build a (R)DBMS in C.
 
-It's purposes are to learn database concepts pratically, exercise my C language skills and build a portifolio.
+It's purposes are to learn database concepts, exercise my C language skills and build a portifolio.
 
 ***So far there is not executable yet.***
 
