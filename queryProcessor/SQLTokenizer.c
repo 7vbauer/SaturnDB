@@ -1,62 +1,16 @@
+/*
+ *
+ * TODO:
+ * 	- Check the need for 'buffer' that keeps the current token.
+ *	  I think the token_index is the only thing needed.
+ *
+ *
+ * */
 
 #include <stdint.h>
 #include <ctype.h>
 
-
-
-#define SQL_PARSER_LENGTH 256
-#define BUFFER_LENGTH 256
-
-// I prefer the typedef struct struct_name {...} struct_name;
-// but it seems that some compilers don't like it much. Sadge.
-
-struct Sql_Expression{
-    unsigned int * tokens;
-    unsigned int n_tokens;
-    char** strings;
-    unsigned int n_strings;
-    unsigned int* pos_strings;
-}
-typedef struct Sql_Expression Sql_Expression;
-
-struct Sql_Parser{
-    unsigned int tokens[SQL_PARSER_LENGTH];
-    char** strings;
-    unsigned int n_strings;
-    unsigned int exp_type;
-    unsigned int* pos_strings;
-}
-typedef struct Sql_Parser Sql_Parser;
-
-struct Query{
-    char* table;
-    char** columns;
-    int n_columns;
-    //QUALIFIER* qualifier;
-};
-typedef struct Query Query;
-
-//--------------------------------
-
-typedef enum {
-    STATE_INIT,
-    STATE_SELECT,
-    STATE_FROM,
-    STATE_COMMA, 
-    //STATE_SEMICOLON,
-    //STATE_ASTERISC,
-    STATE_STRING,
-    //STATE_INVALID_CHAR
-} State;
-
-typedef enum {
-    SQL_TOKEN_SELECT, 
-    SQL_TOKEN_COMMA, 
-    SQL_TOKEN_FROM, 
-    SQL_TOKEN_SEMICOLON, 
-    SQL_TOKEN_STRING,
-    SQL_TOKEN_ASTERISC
-} Token;
+#include "SQLTokenizer.h"
 
 int check_char(char c){
     if (isalpha(c) || c == '"' || c == '\'') 
@@ -65,7 +19,7 @@ int check_char(char c){
 }
 
 Sql_Expression* parser(const char* text){
-    enum State state = STATE_INIT;
+    State state = STATE_INIT;
     char event;
     int index = 0;
     int token_index = 0;
@@ -98,12 +52,12 @@ Sql_Expression* parser(const char* text){
                         token_index++;
                 }
                 break;
-            case(STATE_SELECT):
-                switch(tolower(text[index])){
-                    case():
-                    case():
-                }
-                break;
+            case(STATE_SELECT):	
+		if(text[index] == SQL_TOKEN_SELECT[token_index + 1]){{
+			
+		}else{
+
+		}
             case(STATE_ASTERISC):
             case(STATE_FROM):
             case(STATE_COMMA):
